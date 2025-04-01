@@ -3,11 +3,17 @@
     "description": "",
     "title": "Articles"
   },
-  "defaultDescription": "Bringing you up to MACH speed with our Enterprise CMS Accelerator",
-  "defaultTitle": "ACES Maverick",
+  "defaultDescription": "Finlays is the leading independent B2B supplier of tea, coffee and botanical solutions to beverage brand owners worldwide. Find out more today.",
+  "defaultTitle": "B2B Coffee & Tea Supplier",
   "search": {
     "description": "",
     "title": "Search"
   },
-  "siteTemplate": "ACES Maverick"
+  "forms": {
+    "thankYou": {
+      "description": "",
+      "title": "Thank You"
+    }
+  },
+  "siteTemplate": "B2B Coffee & Tea Supplier"
 }

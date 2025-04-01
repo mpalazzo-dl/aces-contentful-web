@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import NextLink from "next/link";
 import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
 
@@ -8,7 +8,7 @@ import { Box } from "@maverick/ui";
 export interface LinkProps
   extends Pick<
     MuiLinkProps,
-    "color" | "variant" | "underline" | "aria-label" | "target"
+    "color" | "variant" | "underline" | "aria-label" | "target" | "rel"
   > {
   href: string;
   passHref?: boolean;
@@ -37,6 +37,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       endIcon,
       style,
       children,
+      rel,
       onMouseEnter,
       onMouseLeave,
     },
@@ -48,6 +49,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       <NextLink href={href} passHref={true} legacyBehavior={true}>
         <LinkComponent
           ref={ref}
+          rel={rel}
           href={href}
           color={color}
           variant={variant}
@@ -83,9 +85,14 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 Link.displayName = "Link";
 
 export const LinkWrapper = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ href, passHref, children }, ref) => {
+  ({ href, passHref, children, style }, ref) => {
     return (
-      <NextLink href={href} passHref={passHref} legacyBehavior={true} ref={ref}>
+      <NextLink
+        href={href}
+        passHref={passHref}
+        ref={ref}
+        style={style as CSSProperties}
+      >
         {children}
       </NextLink>
     );

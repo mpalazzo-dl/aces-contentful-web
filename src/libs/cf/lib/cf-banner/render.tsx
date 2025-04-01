@@ -2,20 +2,24 @@ import { ContentfulLivePreview } from "@contentful/live-preview";
 
 import {
   CfBaseComponent,
-  CfColorPicker,
-  CfColorPickerPalette,
+  CfImageProps,
 } from "@maverick/types";
-import { isLight, generateId } from "@maverick/utils";
+import { generateId } from "@maverick/utils";
 import { componentSpacing, palette } from "@maverick/theme";
-import { Box, Container, H2, Text } from "@maverick/ui";
+import { Box, Container, H3, Text, Row, Col, FlexBox } from "@maverick/ui";
 
 import { CfButton, CfButtonProps } from "../cf-button/render";
+import { CfImage } from "../cf-image/render";
+
+
 
 export interface CfBannerProps extends CfBaseComponent {
   headline?: string;
   subhead?: string;
   button?: CfButtonProps;
-  backgroundColor: CfColorPicker;
+  media: CfImageProps;
+  mediaAlignment: string;
+  theme: string;
 }
 
 export const CfBanner = ({
@@ -23,46 +27,54 @@ export const CfBanner = ({
   headline,
   subhead,
   button,
-  backgroundColor,
+  media,
+  mediaAlignment,
+  theme,
   __typename,
   id,
   lang,
   preview,
 }: CfBannerProps) => {
-  const color = isLight(backgroundColor.value)
-    ? "primary.contrastText"
-    : "text.primary";
-
+  const color = theme === "Primary Gradient" ? "common.white" : "text.primary";
+  const align = mediaAlignment === "Center" ? "center" : "left";
   return (
-    <Box
+    <Box 
       id={generateId(internalTitle)}
       data-component={__typename}
-      marginY={{ xs: componentSpacing.xs, md: componentSpacing.md }}
+      paddingY={{ xs: componentSpacing.lg, 
+                  md: componentSpacing.xl,
+      }}
+      style={{
+        background:
+          theme === "Blue Gray" ? palette.tertiary.grayblue 
+          : mediaAlignment === "Right" ? palette.gradient.primaryMainLight270 
+          : palette.gradient.primaryMainLight90,
+      }}
     >
       <Container>
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            alignItems: { xs: "flex-start", md: "center" },
-            justifyContent: "space-between",
-            gap: "1.5rem",
-            background:
-              backgroundColor.name === CfColorPickerPalette.Secondary
-                ? palette.gradient.secondary
-                : palette.gradient.primary,
-            padding: { xs: "1.5rem", md: "3rem" },
+        <Row
+          alignItems={"center"}
+          flexDirection={{
+            xs: "column-reverse",
+            md: mediaAlignment === "Right" ? "row"
+              : mediaAlignment === "Left" ? "row-reverse"
+              : "column-reverse"
           }}
-          {...ContentfulLivePreview.getProps({
-            entryId: id,
-            fieldId: "backgroundColor",
-            locale: lang,
-          })}
         >
-          {(headline || subhead) && (
-            <Box style={{ maxWidth: "524px" }}>
+        {(headline || subhead || button) && (
+          <Col size={{xs: 12, md: 6}}>
+            <FlexBox
+              maxWidth={mediaAlignment === "Center" ? "800px" : "500px"}
+              flexDirection={"column"}
+              alignItems={ mediaAlignment === "Center" ? "center" : "start"}
+              marginLeft={mediaAlignment === "Left" ? "auto" : "0px"}
+              height={"100%"}
+              gap={4}
+              
+            >
               {headline && (
-                <H2
+                <H3
+                  align={align}
                   color={color}
                   marginBottom={2}
                   {...ContentfulLivePreview.getProps({
@@ -72,10 +84,11 @@ export const CfBanner = ({
                   })}
                 >
                   {headline}
-                </H2>
+                </H3>
               )}
               {subhead && (
-                <Text
+                <Text 
+                  align={align}
                   color={color}
                   {...ContentfulLivePreview.getProps({
                     entryId: id,
@@ -86,11 +99,8 @@ export const CfBanner = ({
                   {subhead}
                 </Text>
               )}
-            </Box>
-          )}
-          {button && (
-            <Box style={{ width: { xs: "100%", sm: "auto" } }}>
-              <CfButton
+              {button && (
+                <CfButton 
                 internalTitle={button.internalTitle}
                 title={button.title}
                 link={button.link}
@@ -99,10 +109,29 @@ export const CfBanner = ({
                 id={button?.sys?.id || ""}
                 preview={preview}
                 lang={lang}
+                />
+              )}
+            </FlexBox>
+          </Col>
+        )}
+        {media && (
+          <Col size={{xs: 12, md: 6}}>
+            <FlexBox 
+              flexDirection={"column"}
+              // minWidth={"300px"}
+              >
+              <CfImage
+                internalTitle={media.internalTitle}
+                image={media.image}
+                __typename={media.__typename}
+                id={id}
+                lang={lang}
+                preview={preview}
               />
-            </Box>
-          )}
-        </Box>
+            </FlexBox>
+          </Col>
+        )}
+        </Row>
       </Container>
     </Box>
   );

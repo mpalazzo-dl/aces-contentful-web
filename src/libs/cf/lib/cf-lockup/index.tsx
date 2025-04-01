@@ -34,6 +34,7 @@ export const CfLockupServer = async ({
       media={data.media}
       mediaSize={data.mediaSize}
       mediaAlignment={data.mediaAlignment}
+      mediaBleed={data.mediaBleed}
       __typename={data.__typename}
       nested={nested}
       id={id}

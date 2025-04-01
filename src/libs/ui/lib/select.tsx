@@ -116,16 +116,16 @@ export const Select: React.FC<SelectProps> = ({
         renderValue={renderValue}
         onChange={onChange}
         sx={{
-          minHeight: "65px",
+          minHeight: "44px",
           ".MuiSelect-select": {
             display: "flex",
             alignItems: "center",
-            minHeight: "65px",
+            minHeight: "44px",
             paddingTop: 0,
             paddingBottom: 0,
           },
           ".MuiInputBase-root": {
-            minHeight: "65px",
+            minHeight: "44px",
           },
           paddingRight:
             onClear && selectedValue && selectedValue.length > 0

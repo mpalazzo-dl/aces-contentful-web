@@ -46,18 +46,17 @@ export default async function RootLayout({
 }>) {
   const { isEnabled } = await draftMode();
   const appId = process.env.NEXT_PUBLIC_CF_APP_ID || "";
+  const gtmId = process.env.NEXT_PUBLIC_CF_GTM_ID || "";
 
   return (
     <html lang={lang}>
-      {process.env.NEXT_PUBLIC_CF_GTM_ID && (
-        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_CF_GTM_ID} />
-      )}
+      {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body style={{ backgroundColor: palette.background.default }}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <HeaderServer
               appId={appId}
-              sticky={true}
+              sticky={false}
               preview={isEnabled}
               lang={lang}
             />

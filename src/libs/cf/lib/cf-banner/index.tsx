@@ -24,7 +24,9 @@ export const CfBannerServer = async ({ id, preview, lang }: CfFetchById) => {
       headline={data.headline}
       subhead={data.subhead}
       button={data.button}
-      backgroundColor={data.backgroundColor}
+      theme={data.theme}
+      media={data.media}
+      mediaAlignment={data.mediaAlignment}
       __typename={data.__typename}
       id={id}
       lang={lang}

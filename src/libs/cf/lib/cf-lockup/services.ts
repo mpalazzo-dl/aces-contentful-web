@@ -32,6 +32,7 @@ export const LockupFragement = gql`
     }
     mediaSize
     mediaAlignment
+    mediaBleed
     sys {
       id
     }

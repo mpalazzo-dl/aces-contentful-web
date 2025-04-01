@@ -1,3 +1,4 @@
+import { defaultLocale } from "@maverick/i18n";
 import {
   CfImageOverlayHeroServer,
   CfAccordionsServer,
@@ -12,8 +13,8 @@ import {
   CfRichTextSectionServer,
   CfSliderServer,
   CfVideoEmbedServer,
+  CfIconCardServer,
 } from "@maverick/cf";
-import { defaultLocale } from "@maverick/i18n";
 
 export const EntriesPreview = ({
   item,
@@ -74,6 +75,22 @@ export const EntriesPreview = ({
     case "Header":
       return (
         <CfHeaderServer
+          id={item?.sys?.id || ""}
+          preview={preview}
+          lang={lang}
+        />
+      );
+    case "IconCard":
+      return (
+        <CfIconCardServer
+          id={item?.sys?.id || ""}
+          preview={preview}
+          lang={lang}
+        />
+      );
+    case "IconCardGroup":
+      return (
+        <CfIconCardServer
           id={item?.sys?.id || ""}
           preview={preview}
           lang={lang}

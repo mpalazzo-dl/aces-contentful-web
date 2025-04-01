@@ -8,10 +8,11 @@ export const ListingQuery = gql`
     listing(id: $id, preview: $preview, locale: $locale) {
       internalTitle
       listingType
+      showDividers
       gridColumnCount
       listItemsCollection {
         items {
-          ... on Card {
+          ... on IconCardGroup {
             sys {
               id
             }
@@ -22,6 +23,11 @@ export const ListingQuery = gql`
             }
           }
           ... on RichTextSection {
+            sys {
+              id
+            }
+          }
+          ... on Services {
             sys {
               id
             }

@@ -3,24 +3,29 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { BLOCKS, Document, INLINES, Node } from "@contentful/rich-text-types";
 
 import { CfAlignment, CfBaseComponent } from "@maverick/types";
-import { Box, H1, H2, H3, H4, H5, H6, Text } from "@maverick/ui";
+import { Box, FlexBox, H1, H2, H3, H4, H5, H6, Text } from "@maverick/ui";
 import {
+  CfAccordionsServer,
   CfButtonServer,
   CfCodeEmbedServer,
   CfHeaderServer,
   CfImageServer,
   CfLinkTextServer,
+  CfListingServer,
+  CfLockupServer,
   CfVideoEmbedServer,
 } from "@maverick/cf";
 
 import { fetchRichTextEmbedEntry } from "./services";
 import style from "./style.module.css";
+import { maxTextWidth, typography } from "@maverick/theme";
 
 export interface CfRichTextRenderProps
   extends Pick<CfBaseComponent, "lang" | "preview"> {
   richTextDocument: Document;
   alignment?: CfAlignment;
   baseFontSize?: string;
+  enableMaxTextWidth?: boolean;
 }
 
 const mapAlignment = (
@@ -44,10 +49,22 @@ const mapAlignment = (
   }
 };
 
+const flexMapAlignment = (alignment: CfAlignment) => {
+  switch (alignment) {
+    case "Center":
+      return "center";
+    case "Right":
+      return "flex-end";
+    default:
+      return "flex-start";
+  }
+};
+
 export const CfRichTextRender = ({
   richTextDocument,
   alignment = "Left",
-  baseFontSize = "1rem",
+  baseFontSize = typography.body1.fontSize,
+  enableMaxTextWidth = false,
   lang,
   preview,
   ...rest
@@ -84,6 +101,9 @@ export const CfRichTextRender = ({
           fontSize: "inherit",
           lineHeight: "inherit",
           paddingBottom: "1rem",
+          maxWidth: enableMaxTextWidth ? maxTextWidth : "none",
+          marginX:
+            enableMaxTextWidth && alignment === "Center" ? "auto" : "inherit",
           "&:last-child": { paddingBottom: 0 },
         }}
       >
@@ -98,32 +118,80 @@ export const CfRichTextRender = ({
         <CfText>{children}</CfText>
       ),
       [BLOCKS.HEADING_1]: (node: Node, children: React.ReactNode) => (
-        <H1 align={mapAlignment(alignment)} style={{ marginBottom: "1rem" }}>
+        <H1
+          align={mapAlignment(alignment)}
+          style={{
+            marginBottom: "1rem",
+            maxWidth: enableMaxTextWidth ? maxTextWidth : "none",
+            marginX:
+              enableMaxTextWidth && alignment === "Center" ? "auto" : "inherit",
+          }}
+        >
           {children}
         </H1>
       ),
       [BLOCKS.HEADING_2]: (node: Node, children: React.ReactNode) => (
-        <H2 align={mapAlignment(alignment)} style={{ marginBottom: "1rem" }}>
+        <H2
+          align={mapAlignment(alignment)}
+          style={{
+            marginBottom: "1rem",
+            maxWidth: enableMaxTextWidth ? maxTextWidth : "none",
+            marginX:
+              enableMaxTextWidth && alignment === "Center" ? "auto" : "inherit",
+          }}
+        >
           {children}
         </H2>
       ),
       [BLOCKS.HEADING_3]: (node: Node, children: React.ReactNode) => (
-        <H3 align={mapAlignment(alignment)} style={{ marginBottom: "1rem" }}>
+        <H3
+          align={mapAlignment(alignment)}
+          style={{
+            marginBottom: "1rem",
+            maxWidth: enableMaxTextWidth ? maxTextWidth : "none",
+            marginX:
+              enableMaxTextWidth && alignment === "Center" ? "auto" : "inherit",
+          }}
+        >
           {children}
         </H3>
       ),
       [BLOCKS.HEADING_4]: (node: Node, children: React.ReactNode) => (
-        <H4 align={mapAlignment(alignment)} style={{ marginBottom: ".75rem" }}>
+        <H4
+          align={mapAlignment(alignment)}
+          style={{
+            marginBottom: ".75rem",
+            maxWidth: enableMaxTextWidth ? maxTextWidth : "none",
+            marginX:
+              enableMaxTextWidth && alignment === "Center" ? "auto" : "inherit",
+          }}
+        >
           {children}
         </H4>
       ),
       [BLOCKS.HEADING_5]: (node: Node, children: React.ReactNode) => (
-        <H5 align={mapAlignment(alignment)} style={{ marginBottom: ".5rem" }}>
+        <H5
+          align={mapAlignment(alignment)}
+          style={{
+            marginBottom: ".5rem",
+            maxWidth: enableMaxTextWidth ? maxTextWidth : "none",
+            marginX:
+              enableMaxTextWidth && alignment === "Center" ? "auto" : "inherit",
+          }}
+        >
           {children}
         </H5>
       ),
       [BLOCKS.HEADING_6]: (node: Node, children: React.ReactNode) => (
-        <H6 align={mapAlignment(alignment)} style={{ marginBottom: ".5rem" }}>
+        <H6
+          align={mapAlignment(alignment)}
+          style={{
+            marginBottom: ".5rem",
+            maxWidth: enableMaxTextWidth ? maxTextWidth : "none",
+            marginX:
+              enableMaxTextWidth && alignment === "Center" ? "auto" : "inherit",
+          }}
+        >
           {children}
         </H6>
       ),
@@ -134,6 +202,15 @@ export const CfRichTextRender = ({
         const typename = entry.__typename;
 
         switch (typename) {
+          case "Accordions":
+            return (
+              <CfAccordionsServer
+                id={id}
+                preview={preview}
+                lang={lang}
+                nested
+              />
+            );
           case "CodeEmbed":
             return (
               <CfCodeEmbedServer id={id} preview={preview} lang={lang} nested />
@@ -150,7 +227,17 @@ export const CfRichTextRender = ({
             );
           case "Image":
             return (
-              <CfImageServer id={id} preview={preview} lang={lang} nested />
+              <FlexBox marginY={2} justifyContent={flexMapAlignment(alignment)}>
+                <CfImageServer id={id} preview={preview} lang={lang} nested />
+              </FlexBox>
+            );
+          case "Listing":
+            return (
+              <CfListingServer id={id} preview={preview} lang={lang} nested />
+            );
+          case "Lockup":
+            return (
+              <CfLockupServer id={id} preview={preview} lang={lang} nested />
             );
           case "VideoEmbed":
             return (
@@ -175,7 +262,14 @@ export const CfRichTextRender = ({
           case "Button":
             return <CfButtonServer id={id} preview={preview} lang={lang} />;
           case "LinkText":
-            return <CfLinkTextServer id={id} preview={preview} lang={lang} />;
+            return (
+              <CfLinkTextServer
+                id={id}
+                preview={preview}
+                lang={lang}
+                alignment={mapAlignment(alignment)}
+              />
+            );
           default:
             return null;
         }

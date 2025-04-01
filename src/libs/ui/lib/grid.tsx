@@ -27,7 +27,7 @@ export const Row = ({
   marginBottom,
   flexDirection = {
     xs: "column",
-    md: "row",
+    sm: "row",
   },
   alignItems,
   rowSpacing,

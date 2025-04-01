@@ -30,6 +30,7 @@ export const CfRichTextSectionServer = async ({
       internalTitle={data.internalTitle}
       alignment={data.alignment}
       containerWidth={data.containerWidth}
+      cfComponentSpacing={data.componentSpacing}
       grayBackground={data.grayBackground}
       bodyCopy={data.bodyCopy}
       border={data.border}

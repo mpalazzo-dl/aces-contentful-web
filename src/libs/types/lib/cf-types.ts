@@ -1,6 +1,7 @@
 import { Document } from "@contentful/rich-text-types";
 
 import { PageLinkProps } from "./pages-types";
+import { CSSProperties } from "react";
 
 // SYS && Base Component Types
 
@@ -73,6 +74,8 @@ export enum CfColorPickerPalette {
   Secondary = "Secondary",
 }
 
+export type CfComponentSpacing = "xs" | "sm" | "md" | "lg" | "xl";
+
 // Reusable CF Types
 
 export type CfRichText = {
@@ -99,6 +102,12 @@ export type CfCollectionItems = {
 export type CfCollectionItem = {
   title: string;
   slug: string;
+  linkedFrom?: {
+    articleCollection: {
+      total: number;
+    };
+  };
+  __typename?: string;
 };
 
 export interface CfImageProps extends CfBaseComponent, Nested {
@@ -110,5 +119,7 @@ export interface CfImageProps extends CfBaseComponent, Nested {
   maxWidth?: number;
   maxHeight?: number;
   altText?: string;
+  nativeImageSize?: boolean;
   responsive?: boolean;
+  style?: CSSProperties;
 }

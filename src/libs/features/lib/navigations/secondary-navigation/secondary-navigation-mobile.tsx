@@ -3,7 +3,7 @@
 import { ContentfulLivePreview } from "@contentful/live-preview";
 
 import { CfBaseComponent } from "@maverick/types";
-import { Box, List } from "@maverick/ui";
+import { Box, Divider, List } from "@maverick/ui";
 import { CfButton, CfButtonProps } from "@maverick/cf";
 
 import {
@@ -11,7 +11,9 @@ import {
   isCfButton,
   isCfMenuItem,
   MobileMenuItem,
+  mobileMenuPaddingStyle,
 } from "../menus";
+import { typography } from "@maverick/theme";
 
 interface SecondaryNavigationMobileProps
   extends Pick<CfBaseComponent, "id" | "lang"> {
@@ -23,8 +25,6 @@ export const SecondaryNavigationMobile = ({
   id,
   lang,
 }: SecondaryNavigationMobileProps) => {
-  const paddingStyle = "1.6rem 1.6rem";
-
   return (
     <List
       {...ContentfulLivePreview.getProps({
@@ -33,6 +33,8 @@ export const SecondaryNavigationMobile = ({
         locale: lang,
       })}
     >
+      <Divider margin={mobileMenuPaddingStyle} />
+
       {data.map((item, index) => {
         const typename = item.__typename;
 
@@ -48,7 +50,11 @@ export const SecondaryNavigationMobile = ({
                   key={index}
                   item={item}
                   lang={lang}
-                  paddingStyle={paddingStyle}
+                  fontSize={typography.caption2.fontSize}
+                  style={{
+                    textTransform: "uppercase",
+                    letterSpacing: ".1rem",
+                  }}
                 />
               );
             }

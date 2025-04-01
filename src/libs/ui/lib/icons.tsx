@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { IconProps as MuiIconProps } from "@mui/material/Icon";
+import Image from "next/image";
 import {
   AccessTime as AccessTimeIcon,
   AccessTimeFilled as AccessTimeFilledIcon,
@@ -56,6 +56,7 @@ import {
   FacebookOutlined as FacebookOutlinedIcon,
   Favorite as FavoriteIcon,
   FavoriteBorder as FavoriteBorderIcon,
+  FormatListBulleted as FormatListBulletedIcon,
   Group as GroupIcon,
   Help as HelpIcon,
   HelpOutline as HelpOutlineIcon,
@@ -150,8 +151,30 @@ import {
   ZoomOut as ZoomOutIcon,
 } from "@mui/icons-material";
 
-import { CustomCssProps } from "@maverick/types";
+import { CustomCssProps, ResponsiveSpacing } from "@maverick/types";
 import { SvgIcon } from "@mui/material";
+
+import { InlineBox } from "./box";
+
+import BottleJarIcon from "../assets/bottle-jar.svg";
+import BoxDispenserIcon from "../assets/box-dispenser.svg";
+import CoffeeMugTogoCupIcon from "../assets/coffee-mug-and-togo-cup.svg";
+import ColdBrewBottleIcon from "../assets/cold-brew-bottle.svg";
+import DrumContainerIcon from "../assets/drum-container.svg";
+import EnergyDrinkCansIcon from "../assets/energy-drink-cans.svg";
+import FFSPouchIcon from "../assets/ffs-pouch.svg";
+import FrozenTreatIcon from "../assets/frozen-treat.svg";
+import GlassDrinkIcon from "../assets/glass-drink.svg";
+import HeartMonitorIcon from "../assets/heart-monitor.svg";
+import MartiniGlassIcon from "../assets/martini-glass.svg";
+import PailIcon from "../assets/pail.svg";
+import PlasticBottlesIcon from "../assets/plastic-bottles.svg";
+import SmoothieIcon from "../assets/smoothie.svg";
+import SportsDrinkBottleIcon from "../assets/sports-drink-bottle.svg";
+import TeabagsIcon from "../assets/tea-bags.svg";
+import ToteIcon from "../assets/tote.svg";
+import TwoColdDrinksIcon from "../assets/two-cold-drinks.svg";
+import WaterBottleIcon from "../assets/water-bottle.svg";
 
 export enum IconEnum {
   AccessTime = "AccessTime",
@@ -177,7 +200,10 @@ export enum IconEnum {
   ArrowLeft = "ArrowLeft",
   ArrowRight = "ArrowRight",
   ArrowForward = "ArrowForward",
+  ArrowTopRight = "ArrowTopRight",
   AttachFile = "AttachFile",
+  BottleJar = "BottleJar",
+  BoxDispenser = "BoxDispenser",
   Block = "Block",
   CalendarMonth = "CalendarMonth",
   CalendarToday = "CalendarToday",
@@ -190,6 +216,8 @@ export enum IconEnum {
   ChevronLeft = "ChevronLeft",
   ChevronRight = "ChevronRight",
   Close = "Close",
+  CoffeeMugTogoCup = "CoffeeMugTogoCup",
+  ColdBrewBottle = "ColdBrewBottle",
   Comment = "Comment",
   ContentCopy = "ContentCopy",
   Create = "Create",
@@ -198,7 +226,9 @@ export enum IconEnum {
   Discount = "Discount",
   Download = "Download",
   DownloadDone = "DownloadDone",
+  DrumContainer = "DrumContainer",
   Edit = "Edit",
+  EnergyDrinkCans = "EnergyDrinkCans",
   Event = "Event",
   EventAvailable = "EventAvailable",
   ExpandLess = "ExpandLess",
@@ -207,7 +237,12 @@ export enum IconEnum {
   FacebookOutlined = "FacebookOutlined",
   Favorite = "Favorite",
   FavoriteBorder = "FavoriteBorder",
+  FormatListBulleted = "FormatListBulleted",
+  FFSPouch = "FFSPouch",
+  FrozenTreat = "FrozenTreat",
+  GlassDrink = "GlassDrink",
   Group = "Group",
+  HeartMonitor = "HeartMonitor",
   Help = "Help",
   HelpOutline = "HelpOutline",
   History = "History",
@@ -229,6 +264,7 @@ export enum IconEnum {
   Mail = "Mail",
   MailOutline = "MailOutline",
   Map = "Map",
+  MartiniGlass = "MartiniGlass",
   Menu = "Menu",
   MoreHoriz = "MoreHoriz",
   MoreVert = "MoreVert",
@@ -239,6 +275,7 @@ export enum IconEnum {
   NotificationsOff = "NotificationsOff",
   NotificationsPaused = "NotificationsPaused",
   OpenInNew = "OpenInNew",
+  Pail = "Pail",
   Payment = "Payment",
   PaymentOutlined = "PaymentOutlined",
   Person = "Person",
@@ -251,6 +288,7 @@ export enum IconEnum {
   PinDropOutlined = "PinDropOutlined",
   Place = "Place",
   PlaceOutlined = "PlaceOutlined",
+  PlasticBottles = "PlasticBottles",
   PlayArrow = "PlayArrow",
   PlayCircle = "PlayCircle",
   Print = "Print",
@@ -276,6 +314,8 @@ export enum IconEnum {
   SortByAlpha = "SortByAlpha",
   SortByAlphaOutlined = "SortByAlphaOutlined",
   SortOutlined = "SortOutlined",
+  Smoothie = "Smoothie",
+  SportsDrinkBottle = "SportsDrinkBottle",
   Star = "Star",
   StarBorder = "StarBorder",
   StarHalf = "StarHalf",
@@ -283,10 +323,13 @@ export enum IconEnum {
   StorefrontOutlined = "StorefrontOutlined",
   Sync = "Sync",
   SyncDisabled = "SyncDisabled",
+  Teabags = "Teabags",
   Today = "Today",
   TodayOutlined = "TodayOutlined",
   ToggleOff = "ToggleOff",
   ToggleOn = "ToggleOn",
+  Tote = "Tote",
+  TwoColdDrinks = "TwoColdDrinks",
   X = "X",
   Update = "Update",
   UpdateOutlined = "UpdateOutlined",
@@ -294,6 +337,7 @@ export enum IconEnum {
   VerifiedOutlined = "VerifiedOutlined",
   Visibility = "Visibility",
   VisibilityOff = "VisibilityOff",
+  WaterBottle = "WaterBottle",
   Warning = "Warning",
   WarningOutlined = "WarningOutlined",
   YouTube = "YouTube",
@@ -304,20 +348,23 @@ export enum IconEnum {
 
 enum IconTypeEnum {
   Mui = "Mui",
-  Custom = "Custom",
+  CustomSvg = "CustomSvg",
+  CustomImg = "CustomImg",
 }
 
-export type IconSize = MuiIconProps["fontSize"] | number | string;
+export type IconSize = number;
 
 interface IconProps {
   className?: string;
   color?: string;
   icon: keyof typeof IconEnum;
   size?: IconSize;
-  marginTop?: number;
-  marginBottom?: number;
-  marginRight?: number;
-  marginLeft?: number;
+  marginTop?: ResponsiveSpacing;
+  marginBottom?: ResponsiveSpacing;
+  marginRight?: ResponsiveSpacing;
+  marginLeft?: ResponsiveSpacing;
+  marginY?: ResponsiveSpacing;
+  marginX?: ResponsiveSpacing;
   style?: CustomCssProps | React.CSSProperties;
 }
 
@@ -330,11 +377,13 @@ export const Icon = ({
   marginBottom,
   marginRight,
   marginLeft,
+  marginY,
+  marginX,
   style,
 }: IconProps) => {
   let IconComponent: any = null;
   let IconType = null;
-  const iconSize = size || "24px";
+  const iconSize = size || 28;
 
   switch (icon) {
     case IconEnum.AccessTime:
@@ -429,9 +478,34 @@ export const Icon = ({
       IconComponent = ArrowForwardIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.ArrowTopRight:
+      IconComponent = (
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7.12962 5.61112L15.6812 5.41225C15.9298 5.41225 16.1287 5.51169 16.3027 5.6857C16.4518 5.83486 16.5513 6.03373 16.5513 6.28232L16.3524 14.8339C16.3275 15.3062 15.9546 15.6791 15.4823 15.6543C15.0348 15.6543 14.6371 15.2565 14.662 14.7842L14.836 8.34564L6.38384 16.7978C6.03581 17.1458 5.51377 17.1209 5.1906 16.7978C4.84257 16.4497 4.84257 15.9526 5.1906 15.6045L13.6427 7.1524L7.17933 7.30155C6.70701 7.32641 6.30926 6.92866 6.30926 6.4812C6.2844 6.00887 6.65729 5.63598 7.12962 5.61112Z"
+            fill="#E5554F"
+          />
+        </svg>
+      );
+      IconType = IconTypeEnum.CustomSvg;
+      break;
     case IconEnum.AttachFile:
       IconComponent = AttachFileIcon;
       IconType = IconTypeEnum.Mui;
+      break;
+    case IconEnum.BottleJar:
+      IconComponent = BottleJarIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
+    case IconEnum.BoxDispenser:
+      IconComponent = BoxDispenserIcon;
+      IconType = IconTypeEnum.CustomImg;
       break;
     case IconEnum.Block:
       IconComponent = BlockIcon;
@@ -481,6 +555,14 @@ export const Icon = ({
       IconComponent = CloseIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.CoffeeMugTogoCup:
+      IconComponent = CoffeeMugTogoCupIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
+    case IconEnum.ColdBrewBottle:
+      IconComponent = ColdBrewBottleIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
     case IconEnum.Comment:
       IconComponent = CommentIcon;
       IconType = IconTypeEnum.Mui;
@@ -513,9 +595,17 @@ export const Icon = ({
       IconComponent = DownloadDoneIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.DrumContainer:
+      IconComponent = DrumContainerIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
     case IconEnum.Edit:
       IconComponent = EditIcon;
       IconType = IconTypeEnum.Mui;
+      break;
+    case IconEnum.EnergyDrinkCans:
+      IconComponent = EnergyDrinkCansIcon;
+      IconType = IconTypeEnum.CustomImg;
       break;
     case IconEnum.Event:
       IconComponent = EventIcon;
@@ -549,9 +639,29 @@ export const Icon = ({
       IconComponent = FavoriteBorderIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.FFSPouch:
+      IconComponent = FFSPouchIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
+    case IconEnum.FormatListBulleted:
+      IconComponent = FormatListBulletedIcon;
+      IconType = IconTypeEnum.Mui;
+      break;
+    case IconEnum.FrozenTreat:
+      IconComponent = FrozenTreatIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
+    case IconEnum.GlassDrink:
+      IconComponent = GlassDrinkIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
     case IconEnum.Group:
       IconComponent = GroupIcon;
       IconType = IconTypeEnum.Mui;
+      break;
+    case IconEnum.HeartMonitor:
+      IconComponent = HeartMonitorIcon;
+      IconType = IconTypeEnum.CustomImg;
       break;
     case IconEnum.Help:
       IconComponent = HelpIcon;
@@ -637,6 +747,10 @@ export const Icon = ({
       IconComponent = MapIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.MartiniGlass:
+      IconComponent = MartiniGlassIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
     case IconEnum.Menu:
       IconComponent = MenuIcon;
       IconType = IconTypeEnum.Mui;
@@ -681,6 +795,10 @@ export const Icon = ({
       IconComponent = PaymentIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.Pail:
+      IconComponent = PailIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
     case IconEnum.PaymentOutlined:
       IconComponent = PaymentOutlinedIcon;
       IconType = IconTypeEnum.Mui;
@@ -724,6 +842,10 @@ export const Icon = ({
     case IconEnum.PlaceOutlined:
       IconComponent = PlaceOutlinedIcon;
       IconType = IconTypeEnum.Mui;
+      break;
+    case IconEnum.PlasticBottles:
+      IconComponent = PlasticBottlesIcon;
+      IconType = IconTypeEnum.CustomImg;
       break;
     case IconEnum.PlayArrow:
       IconComponent = PlayArrowIcon;
@@ -825,6 +947,14 @@ export const Icon = ({
       IconComponent = SortOutlinedIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.Smoothie:
+      IconComponent = SmoothieIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
+    case IconEnum.SportsDrinkBottle:
+      IconComponent = SportsDrinkBottleIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
     case IconEnum.Star:
       IconComponent = StarIcon;
       IconType = IconTypeEnum.Mui;
@@ -853,6 +983,10 @@ export const Icon = ({
       IconComponent = SyncDisabledIcon;
       IconType = IconTypeEnum.Mui;
       break;
+    case IconEnum.Teabags:
+      IconComponent = TeabagsIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
     case IconEnum.Today:
       IconComponent = TodayIcon;
       IconType = IconTypeEnum.Mui;
@@ -868,6 +1002,14 @@ export const Icon = ({
     case IconEnum.ToggleOn:
       IconComponent = ToggleOnIcon;
       IconType = IconTypeEnum.Mui;
+      break;
+    case IconEnum.Tote:
+      IconComponent = ToteIcon;
+      IconType = IconTypeEnum.CustomImg;
+      break;
+    case IconEnum.TwoColdDrinks:
+      IconComponent = TwoColdDrinksIcon;
+      IconType = IconTypeEnum.CustomImg;
       break;
     case IconEnum.X:
       IconComponent = XIcon;
@@ -896,6 +1038,10 @@ export const Icon = ({
     case IconEnum.VisibilityOff:
       IconComponent = VisibilityOffIcon;
       IconType = IconTypeEnum.Mui;
+      break;
+    case IconEnum.WaterBottle:
+      IconComponent = WaterBottleIcon;
+      IconType = IconTypeEnum.CustomImg;
       break;
     case IconEnum.Warning:
       IconComponent = WarningIcon;
@@ -928,7 +1074,7 @@ export const Icon = ({
           </g>
         </svg>
       );
-      IconType = IconTypeEnum.Custom;
+      IconType = IconTypeEnum.CustomSvg;
       break;
     case IconEnum.ZoomIn:
       IconComponent = ZoomInIcon;
@@ -955,6 +1101,8 @@ export const Icon = ({
           marginBottom: marginBottom !== null ? marginBottom : 0,
           marginRight: marginRight !== null ? marginRight : 0,
           marginLeft: marginLeft !== null ? marginLeft : 0,
+          marginY: marginY !== null ? marginY : 0,
+          marginX: marginX !== null ? marginX : 0,
           pointerEvents: "none",
           ...style,
         }}
@@ -962,7 +1110,7 @@ export const Icon = ({
     );
   }
 
-  if (IconComponent && IconType === IconTypeEnum.Custom) {
+  if (IconComponent && IconType === IconTypeEnum.CustomSvg) {
     return (
       <SvgIcon
         className={className}
@@ -973,12 +1121,42 @@ export const Icon = ({
           marginBottom: marginBottom !== null ? marginBottom : 0,
           marginRight: marginRight !== null ? marginRight : 0,
           marginLeft: marginLeft !== null ? marginLeft : 0,
+          marginY: marginY !== null ? marginY : 0,
+          marginX: marginX !== null ? marginX : 0,
           pointerEvents: "none",
           ...style,
         }}
       >
         {IconComponent}
       </SvgIcon>
+    );
+  }
+
+  if (IconComponent && IconType === IconTypeEnum.CustomImg) {
+    return (
+      <InlineBox
+        style={style}
+        marginY={marginY}
+        marginX={marginX}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        marginRight={marginRight}
+        marginLeft={marginLeft}
+        width={iconSize}
+        className={className}
+      >
+        <Image
+          src={IconComponent}
+          alt={icon}
+          width={iconSize * 2}
+          height={iconSize * 2}
+          style={{
+            maxWidth: "100%",
+            height: "auto",
+            pointerEvents: "none",
+          }}
+        />
+      </InlineBox>
     );
   }
 

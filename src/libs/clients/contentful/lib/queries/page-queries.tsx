@@ -40,6 +40,11 @@ export const DefaultPageBodyQuery = gql`
               id
             }
           }
+          ... on IconCardGroup {
+            sys {
+              id
+            }
+          }
           ... on Listing {
             sys {
               id
@@ -50,7 +55,17 @@ export const DefaultPageBodyQuery = gql`
               id
             }
           }
+          ... on Offerings {
+            sys {
+              id
+            }
+          }
           ... on RichTextSection {
+            sys {
+              id
+            }
+          }
+          ... on Services {
             sys {
               id
             }

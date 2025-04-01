@@ -1,3 +1,4 @@
+import { containerPadding } from "@maverick/theme";
 import MuiContainer, {
   ContainerProps as MuiContainerProps,
 } from "@mui/material/Container";
@@ -24,8 +25,8 @@ export const Container = ({
       disableGutters={disableGutters}
       sx={{
         ...(!noPadding && {
-          paddingLeft: { xs: "1.5rem", sm: "2rem" },
-          paddingRight: { xs: "1.5rem", sm: "2rem" },
+          paddingLeft: containerPadding,
+          paddingRight: containerPadding,
         }),
         flexDirection: "column",
         ...style,

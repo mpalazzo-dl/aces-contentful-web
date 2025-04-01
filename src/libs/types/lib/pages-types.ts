@@ -12,6 +12,7 @@ export interface PageProps {
 
 export enum SpecialtyPages {
   Homepage = "Homepage",
+  Articles = "Articles",
 }
 
 export enum RouteDirectory {
@@ -20,11 +21,14 @@ export enum RouteDirectory {
   Search = "/search",
 }
 
+export type PageLinkTypes = "Page" | "Article";
+
 export interface PageLinkProps {
   slug: string;
-  specialtyPage?: SpecialtyPages.Homepage;
+  specialtyPage?: SpecialtyPages;
   parentPage?: {
     slug: string;
-    specialtyPage?: SpecialtyPages.Homepage;
+    specialtyPage?: SpecialtyPages;
   };
+  __typename: PageLinkTypes;
 }

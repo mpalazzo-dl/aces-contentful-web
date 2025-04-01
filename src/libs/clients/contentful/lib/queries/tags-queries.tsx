@@ -29,6 +29,11 @@ export const AllCategoriesQuery = gql`
     categoriesCollection(preview: $preview, locale: $locale) {
       items {
         ...Categories
+        linkedFrom {
+          articleCollection {
+            total
+          }
+        }
       }
     }
   }

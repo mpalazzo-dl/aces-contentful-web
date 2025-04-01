@@ -4,23 +4,26 @@ import { notFound } from "next/navigation";
 import { ContentfulLivePreview } from "@contentful/live-preview";
 
 import { defaultLocale, getLocale } from "@maverick/i18n";
-import { PageProps } from "@maverick/types";
-import { flattenObjectArray, formatDate } from "@maverick/utils";
-import { palette } from "@maverick/theme";
+import { PageProps, RouteDirectory } from "@maverick/types";
 import {
-  Avatar,
-  Box,
-  Chip,
-  Container,
-  Divider,
-  FlexBox,
-  H1,
-  H6,
-  Paper,
-  Text,
-} from "@maverick/ui";
+  estimateReadTime,
+  flattenObjectArray,
+  formatDate,
+} from "@maverick/utils";
+import { palette, shape } from "@maverick/theme";
+import { Box, Container, Divider, FlexBox, H3, H6, Text } from "@maverick/ui";
 import { CfImageCoverServer, CfRichTextRender } from "@maverick/cf";
-import { buildMetadata, RelatedArticlesServer } from "@maverick/features";
+import {
+  ArticleFeatures,
+  ArticlePageBreadcrumbs,
+  ArticleTags,
+  AuthorBlock,
+  BackToArticleListing,
+  buildMetadata,
+  EnableArticles,
+  RelatedArticlesServer,
+  SocialShareToolbar,
+} from "@maverick/features";
 
 import { fetchArticlePageData } from "./services";
 
@@ -35,7 +38,7 @@ export async function generateMetadata({
 
   const pageResponse = await fetchArticlePageData(slug, isEnabled);
 
-  if (!pageResponse) {
+  if (!pageResponse || !EnableArticles) {
     notFound();
   }
 
@@ -54,117 +57,156 @@ export default async function ArticlePage({
 
   const t = await getLocale(lang, "common");
   const pageResponse = await fetchArticlePageData(slug, isEnabled, lang);
+  const readTime = estimateReadTime(pageResponse.bodyCopy.json);
 
-  if (!pageResponse) {
+  if (!pageResponse || !EnableArticles) {
     notFound();
   }
 
+  const templateRailsWidth = "240px";
+
   return (
-    <Container>
-      <Box marginTop={20} maxWidth={1000}>
-        <H1
-          marginBottom={8}
-          {...ContentfulLivePreview.getProps({
-            entryId: pageResponse.sys.id,
-            fieldId: "title",
-            locale: lang,
-          })}
-        >
-          {pageResponse.title}
-        </H1>
-        <FlexBox marginBottom={5}>
-          <Text
-            {...ContentfulLivePreview.getProps({
-              entryId: pageResponse.sys.id,
-              fieldId: "author",
-              locale: lang,
-            })}
-          >
-            {`${t.by} `} <b>{pageResponse.author.name}</b>
-          </Text>
-          <Text
-            {...ContentfulLivePreview.getProps({
-              entryId: pageResponse.sys.id,
-              fieldId: "publishDate",
-              locale: lang,
-            })}
-          >
-            {" "}
-            ・ {formatDate(pageResponse.publishDate, lang)}
-          </Text>
-        </FlexBox>
-        <FlexBox
-          flexWrap="wrap"
-          {...ContentfulLivePreview.getProps({
-            entryId: pageResponse.sys.id,
-            fieldId: "categories",
-            locale: lang,
-          })}
-        >
-          {pageResponse.categoriesCollection.items.map(
-            (category: { title: string; slug: string }) => (
-              <Chip
-                key={category.slug}
-                label={category.title}
-                uppercase={false}
-                style={{
-                  marginRight: "16px",
-                  marginBottom: { xs: "16px", sm: 0 },
-                }}
-              />
-            ),
-          )}
-        </FlexBox>
-      </Box>
-      <Box marginY={8}>
-        <Paper elevation={1}>
-          <CfImageCoverServer
-            id={pageResponse.featuredImage.sys.id}
-            lang={lang}
-            preview={isEnabled}
-            coverWidth="100%"
-            coverHeight={{ xs: "380px", md: "500px" }}
-            nested={true}
-          />
-          <Box paddingY={{ xs: 6, md: 12 }} paddingX={{ xs: 6, md: 16 }}>
-            <CfRichTextRender
-              richTextDocument={pageResponse.bodyCopy.json}
-              preview={isEnabled}
-              lang={lang}
-              {...ContentfulLivePreview.getProps({
-                entryId: pageResponse.sys.id,
-                fieldId: "bodyCopy",
-                locale: lang,
-              })}
-            />
-            <Divider marginY={16} marginX={{ xs: 2, md: 18 }} />
-            <FlexBox flexDirection="column" alignItems="center">
-              <Avatar
-                image={pageResponse.author.profileImage.image.url}
-                size={160}
-                alt={pageResponse.author.profileImage.image.altText}
-              />
-              <H6 marginTop={4} marginBottom={2}>
-                {pageResponse.author.name}
-              </H6>
-              <Text color={palette.grey[500]}>{pageResponse.author.role}</Text>
-            </FlexBox>
-          </Box>
-        </Paper>
-      </Box>
-      <Box marginY={8}>
-        <RelatedArticlesServer
-          title={t.postType.relatedArticles}
-          categories={flattenObjectArray(
-            pageResponse.categoriesCollection.items,
-            "slug",
-          )}
-          excludeSlug={[slug]}
-          limit={2}
-          preview={isEnabled}
+    <>
+      <Container>
+        <ArticlePageBreadcrumbs
+          article={{
+            slug: pageResponse.slug,
+            title: pageResponse.title,
+          }}
           lang={lang}
         />
-      </Box>
-    </Container>
+        <CfImageCoverServer
+          id={pageResponse.featuredImage.sys.id}
+          lang={lang}
+          preview={isEnabled}
+          borderRadius={shape.borderRadius}
+          coverWidth="100%"
+          coverHeight={{ xs: "320px", md: "580px" }}
+          nested={true}
+        />
+        <FlexBox flexDirection={{ xs: "column", lg: "row" }}>
+          <FlexBox
+            flexDirection="column"
+            justifyContent="space-between"
+            width={{ xs: "100%", lg: templateRailsWidth }}
+            paddingTop={8}
+          >
+            {ArticleFeatures.ShowSocialShare && (
+              <SocialShareToolbar
+                url={`${process.env.NEXT_PUBLIC_SITE_URL}${RouteDirectory.Articles}/${slug}`}
+                hideXTwitter
+              />
+            )}
+            <Box display={{ xs: "none", lg: "block" }}>
+              <BackToArticleListing lang={lang} />
+            </Box>
+          </FlexBox>
+          <Container maxWidth="md" nested style={{ flex: 1 }}>
+            <Box marginTop={8}>
+              <FlexBox flexDirection={{ xs: "column", sm: "row" }} gap={2}>
+                <FlexBox flexDirection={{ xs: "column" }} marginBottom={5}>
+                  {pageResponse.author && (
+                    <Box marginRight={8} marginBottom={2}>
+                      <Text
+                        {...ContentfulLivePreview.getProps({
+                          entryId: pageResponse.sys.id,
+                          fieldId: "author",
+                          locale: lang,
+                        })}
+                      >
+                        {`${t.by} `} <b>{pageResponse.author.name}</b>
+                      </Text>
+                    </Box>
+                  )}
+                  <FlexBox>
+                    <H6
+                      component="p"
+                      color={palette.grey[500]}
+                      {...ContentfulLivePreview.getProps({
+                        entryId: pageResponse.sys.id,
+                        fieldId: "publishDate",
+                        locale: lang,
+                      })}
+                    >
+                      {formatDate(pageResponse.publishDate, lang)}
+                    </H6>
+                    <Box marginLeft={{ xs: 8 }}>
+                      <H6 component="p" color={palette.grey[500]}>
+                        {`${readTime.readTimeMinutes} ${t.postType.min} ${t.postType.read}`}
+                      </H6>
+                    </Box>
+                  </FlexBox>
+                </FlexBox>
+              </FlexBox>
+              <H3
+                component="h1"
+                {...ContentfulLivePreview.getProps({
+                  entryId: pageResponse.sys.id,
+                  fieldId: "title",
+                  locale: lang,
+                })}
+              >
+                {pageResponse.title}
+              </H3>
+              {pageResponse.categoriesCollection.items && (
+                <ArticleTags
+                  categoriesCollection={pageResponse.categoriesCollection}
+                  {...ContentfulLivePreview.getProps({
+                    entryId: pageResponse.sys.id,
+                    fieldId: "categories",
+                    locale: lang,
+                  })}
+                />
+              )}
+            </Box>
+            <Box marginY={8}>
+              {pageResponse.bodyCopy && (
+                <CfRichTextRender
+                  richTextDocument={pageResponse.bodyCopy.json}
+                  preview={isEnabled}
+                  lang={lang}
+                  {...ContentfulLivePreview.getProps({
+                    entryId: pageResponse.sys.id,
+                    fieldId: "bodyCopy",
+                    locale: lang,
+                  })}
+                />
+              )}
+              {pageResponse.author && (
+                <>
+                  <Divider marginY={16} marginX={{ xs: 2, md: 18 }} />
+                  <AuthorBlock
+                    profileImage={pageResponse.author.profileImage}
+                    name={pageResponse.author.name}
+                    role={pageResponse.author.role}
+                  />
+                </>
+              )}
+            </Box>
+          </Container>
+          <Box width={{ xs: "100%", lg: templateRailsWidth }}>
+            <FlexBox
+              justifyContent="center"
+              display={{ xs: "flex", lg: "none " }}
+            >
+              <BackToArticleListing showIcon={false} lang={lang} />
+            </FlexBox>
+          </Box>
+        </FlexBox>
+        <Box marginBottom={15}>
+          <RelatedArticlesServer
+            title={t.postType.relatedArticlesTitle}
+            categories={flattenObjectArray(
+              pageResponse.categoriesCollection.items,
+              "slug",
+            )}
+            excludeSlug={[slug]}
+            limit={4}
+            preview={isEnabled}
+            lang={lang}
+          />
+        </Box>
+      </Container>
+    </>
   );
 }

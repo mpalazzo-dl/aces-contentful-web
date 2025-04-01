@@ -12,32 +12,23 @@ import {
 import { CfLink } from "@maverick/cf";
 
 export enum ButtonStyleType {
-  Primary = "Primary",
   PrimaryOutline = "Primary Outline",
-  PrimaryGradient = "Primary Gradient",
-  Secondary = "Secondary",
-  SecondaryOutline = "Secondary Outline",
   Knockout = "Knockout",
+  KnockoutOutline = "Knockout Outline",
 }
 
 const buttonStyles: Record<
   ButtonStyleType,
   { color: ButtonColor; variant: ButtonVariant }
 > = {
-  [ButtonStyleType.Primary]: { color: "primary", variant: "contained" },
-  [ButtonStyleType.PrimaryGradient]: {
-    color: "gradient",
+  [ButtonStyleType.PrimaryOutline]: { color: "primary", variant: "outlined" },
+  [ButtonStyleType.Knockout]: {
+    color: "secondary",
     variant: "contained",
   },
-  [ButtonStyleType.PrimaryOutline]: { color: "primary", variant: "outlined" },
-  [ButtonStyleType.Secondary]: { color: "secondary", variant: "contained" },
-  [ButtonStyleType.SecondaryOutline]: {
+  [ButtonStyleType.KnockoutOutline]: {
     color: "secondary",
     variant: "outlined",
-  },
-  [ButtonStyleType.Knockout]: {
-    color: "inherit",
-    variant: "text",
   },
 };
 

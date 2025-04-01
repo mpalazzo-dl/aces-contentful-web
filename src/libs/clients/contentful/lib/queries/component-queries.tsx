@@ -21,17 +21,30 @@ export const EntryQuery = gql`
 export const PageLinkFragment = gql`
   fragment PageLink on Page {
     slug
+    specialtyPage
+    parentPage {
+      slug
+      specialtyPage
+    }
+  }
+`;
+
+export const ArticleLinkFragment = gql`
+  fragment ArticleLink on Article {
+    slug
   }
 `;
 
 export const LinkFragment = gql`
   ${PageLinkFragment}
+  ${ArticleLinkFragment}
 
   fragment Link on Link {
     internalTitle
     linkType
     pageLink {
       ...PageLink
+      ...ArticleLink
     }
     customLink
     target
@@ -83,6 +96,7 @@ export const ImageFragment = gql`
       height
     }
     altText
+    nativeImageSize
     sys {
       id
     }
@@ -118,5 +132,19 @@ export const ModalFragment = gql`
       }
     }
     __typename
+  }
+`;
+
+export const OfferingItemFragment = gql`
+  fragment OfferingItem on OfferingItem {
+    internalTitle
+    icon
+    headline
+    bodyCopy {
+      json
+    }
+    sys {
+      id
+    }
   }
 `;

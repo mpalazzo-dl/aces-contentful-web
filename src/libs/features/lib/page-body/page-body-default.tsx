@@ -5,10 +5,13 @@ import {
   CfCodeEmbedServer,
   CfFormServer,
   CfHeaderServer,
+  CfIconCardGroupServer,
   CfImageServer,
   CfListingServer,
   CfLockupServer,
+  CfOfferingsServer,
   CfRichTextSectionServer,
+  CfServicesServer,
   CfSliderServer,
   CfVideoEmbedServer,
 } from "@maverick/cf";
@@ -84,6 +87,15 @@ export const DefaultPageBody = ({ items, preview, lang }: PageBodyProps) => {
                 key={index}
               />
             );
+          case "IconCardGroup":
+            return (
+              <CfIconCardGroupServer
+                id={item?.sys?.id || ""}
+                preview={preview}
+                lang={lang}
+                key={index}
+              />
+            );
           case "Image":
             return (
               <CfImageServer
@@ -111,6 +123,15 @@ export const DefaultPageBody = ({ items, preview, lang }: PageBodyProps) => {
                 key={index}
               />
             );
+          case "Offerings":
+            return (
+              <CfOfferingsServer
+                id={item?.sys?.id || ""}
+                preview={preview}
+                lang={lang}
+                key={index}
+              />
+            );
           case "RichTextSection":
             return (
               <CfRichTextSectionServer
@@ -123,6 +144,15 @@ export const DefaultPageBody = ({ items, preview, lang }: PageBodyProps) => {
           case "Slider":
             return (
               <CfSliderServer
+                id={item?.sys?.id || ""}
+                preview={preview}
+                lang={lang}
+                key={index}
+              />
+            );
+          case "Services":
+            return (
+              <CfServicesServer
                 id={item?.sys?.id || ""}
                 preview={preview}
                 lang={lang}

@@ -32,25 +32,25 @@ export function middleware(request: NextRequest) {
       new URL(
         pathname.replace(
           `/${defaultLocale}`,
-          pathname === `/${defaultLocale}` ? "/" : ""
+          pathname === `/${defaultLocale}` ? "/" : "",
         ),
-        request.url
-      )
+        request.url,
+      ),
     );
   }
 
   const pathnameIsMissingLocale = locales.every(
     (localeObj) =>
       !pathname.startsWith(`/${localeObj.locale}/`) &&
-      pathname !== `/${localeObj.locale}`
+      pathname !== `/${localeObj.locale}`,
   );
 
   if (pathnameIsMissingLocale) {
     return NextResponse.rewrite(
       new URL(
         `/${detectedLocale}${pathname}${request.nextUrl.search}`,
-        request.nextUrl.href
-      )
+        request.nextUrl.href,
+      ),
     );
   }
 }

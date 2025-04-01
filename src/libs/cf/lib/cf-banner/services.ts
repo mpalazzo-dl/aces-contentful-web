@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 
 import {
   ButtonFragment,
+  ImageFragment,
   cfClient,
   cfPreviewClient,
 } from "@maverick/contentful";
@@ -9,6 +10,7 @@ import { defaultLocale } from "@maverick/i18n";
 
 export const BannerQuery = gql`
   ${ButtonFragment}
+  ${ImageFragment}
 
   query ($id: String!, $preview: Boolean!, $locale: String) {
     banner(id: $id, preview: $preview, locale: $locale) {
@@ -18,7 +20,11 @@ export const BannerQuery = gql`
       button {
         ...Button
       }
-      backgroundColor
+      media {
+        ...Image
+      }
+      mediaAlignment
+      theme
       sys {
         id
       }
